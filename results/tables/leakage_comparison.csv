@@ -1,0 +1,3 @@
+horizon,model,walkforward_RMSE,random_kfold_RMSE_oos_rows,random_kfold_RMSE_full_sample,rmse_reduction_vs_walkforward_pct
+5,lightgbm,7.895187263291787,5.716095355817845,5.601216242614111,27.60025614092149
+21,lightgbm,9.546566410689271,3.1517800794969406,3.524674827021655,66.98519714933424

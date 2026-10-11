@@ -1,0 +1,71 @@
+{
+  "best_ml_selection_half": "lightgbm_log",
+  "horizon": 21,
+  "eval_window": "second half of OOS (model selected on first half)",
+  "rows": [
+    {
+      "ann_return": 0.13154170907178583,
+      "ann_vol": 0.163603940486147,
+      "sharpe": 0.8040253106429549,
+      "sharpe_excess": 0.6073300378504344,
+      "max_drawdown": -0.27110398496357657,
+      "total_return": 1.00033838234824,
+      "turnover_ann": 0.0,
+      "strategy": "buy_and_hold"
+    },
+    {
+      "ann_return": 0.12228849178332352,
+      "ann_vol": 0.14911194089476784,
+      "sharpe": 0.8201119980701322,
+      "sharpe_excess": 0.6043001622724594,
+      "max_drawdown": -0.21991828021459614,
+      "total_return": 0.919880801360857,
+      "turnover_ann": 2.472734482779733,
+      "strategy": "vol_target_garch"
+    },
+    {
+      "ann_return": 0.15095079286438196,
+      "ann_vol": 0.1422900810418335,
+      "sharpe": 1.0608665885853434,
+      "sharpe_excess": 0.834708015421041,
+      "max_drawdown": -0.1778618573610098,
+      "total_return": 1.2847814694685984,
+      "turnover_ann": 2.5856523340814155,
+      "strategy": "vol_target_lightgbm_log"
+    }
+  ],
+  "rows_full": [
+    {
+      "ann_return": 0.11603355451147587,
+      "ann_vol": 0.1766146350391462,
+      "sharpe": 0.6569871997626772,
+      "sharpe_excess": 0.5375852381440083,
+      "max_drawdown": -0.36102639752384846,
+      "total_return": 2.246889473922402,
+      "turnover_ann": 0.0,
+      "strategy": "buy_and_hold"
+    },
+    {
+      "ann_return": 0.10205089319238346,
+      "ann_vol": 0.14972580567891683,
+      "sharpe": 0.6815851998901846,
+      "sharpe_excess": 0.5407401813670428,
+      "max_drawdown": -0.23015183538569473,
+      "total_return": 1.902711870519234,
+      "turnover_ann": 2.6930720615628405,
+      "strategy": "vol_target_garch"
+    },
+    {
+      "ann_return": 0.1195335614707701,
+      "ann_vol": 0.1654523697113695,
+      "sharpe": 0.7224650917922515,
+      "sharpe_excess": 0.5950076615298293,
+      "max_drawdown": -0.2982033341614895,
+      "total_return": 2.4608064673067394,
+      "turnover_ann": 2.386052374418479,
+      "strategy": "vol_target_lightgbm_log"
+    }
+  ],
+  "selection_bias_note": "strategy_performance_full.csv selects the ML model on the SAME window it is evaluated on -> optimistic; use strategy_performance.csv.",
+  "disclaimer": "Research only - NOT investment advice. Past performance does not guarantee future results."
+}

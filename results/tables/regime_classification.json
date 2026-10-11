@@ -1,0 +1,10 @@
+{
+  "logistic_pr_auc": 0.3479438987225235,
+  "logistic_brier": 0.1772935378173551,
+  "logistic_base_rate": 0.2223357167177392,
+  "logistic_n": 2937,
+  "lightgbm_pr_auc": 0.22231351273304506,
+  "lightgbm_brier": 0.20540820680043817,
+  "lightgbm_base_rate": 0.2223357167177392,
+  "lightgbm_n": 2937
+}

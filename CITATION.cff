@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this software or reproduce its results, please cite it as below."
+title: "Can Machine Learning Beat GARCH? A Walk-Forward Benchmark for S&P 500 Volatility Forecasting"
+type: software
+authors:
+  - family-names: Basnet
+    given-names: Rajesh
+repository-code: "https://github.com/CaffineDuck67/can-ml-beat-garch.git"
+url: "https://github.com/CaffineDuck67/can-ml-beat-garch"
+license: MIT
+version: 1.0.0
+date-released: 2026-10-11
+keywords:
+  - volatility-forecasting
+  - garch
+  - har-rv
+  - machine-learning
+  - walk-forward-validation
+  - quantitative-finance
+  - reproducible-research

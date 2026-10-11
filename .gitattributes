@@ -1,0 +1,18 @@
+# Normalize line endings to LF across the repository.
+* text=auto eol=lf
+
+# Never touch binary files.
+*.png binary
+*.jpg binary
+*.gif binary
+*.gz binary
+*.zip binary
+*.pt binary
+*.pth binary
+*.ckpt binary
+
+# Treat notebooks and dotfiles as text with LF endings.
+*.ipynb text eol=lf
+.gitignore text eol=lf
+.gitattributes text eol=lf
+Makefile text eol=lf

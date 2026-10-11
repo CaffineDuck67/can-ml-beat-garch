@@ -1,0 +1,138 @@
+# ---------------------------------------------------------------------------
+# Global configuration for the "Can ML Beat GARCH?" volatility benchmark.
+# Every pipeline module reads this file; nothing is hard-coded in the scripts.
+# ---------------------------------------------------------------------------
+
+project:
+  name: vol-forecast-benchmark
+  # Root used to resolve all relative paths below. Kept empty so paths are
+  # relative to the repository root (the folder containing config.yaml).
+  root: "."
+
+# ------------------------------- Data --------------------------------------
+data:
+  start_date: "2000-01-01"          # earliest date we request from any source
+  end_date: null                     # null -> today (resolved at runtime)
+  # Prices downloaded via yfinance
+  tickers:
+    sp500: "^GSPC"
+    vix: "^VIX"
+  # Macro series downloaded from FRED (public fredgraph.csv endpoint, no key)
+  fred_series:
+    - DGS10        # 10Y Treasury constant-maturity yield (%)
+    - DGS2         # 2Y Treasury constant-maturity yield (%)
+    - T10Y2Y       # 10Y-2Y spread (yield-curve slope) (%)
+    - DFF          # Federal funds effective rate (%)
+    - UNRATE       # Civilian unemployment rate (%) [MONTHLY]
+    - CPIAUCSL     # CPI, all urban consumers [MONTHLY]
+    - DCOILWTICO   # WTI crude oil spot price ($/barrel)
+    - BAMLH0A0HYM2 # ICE BofA US High Yield OAS (spread, %)  [TRUNCATED by FRED since 2024]
+    - NFCI         # Chicago Fed National Financial Conditions Index [weekly].
+                   #  Substitute/backup credit-stress proxy with FULL history
+                   #  (BAMLH0A0HYM2 now only serves ~2023+ on FRED; see paper).
+  # Frequency of each FRED series (used for the publication-lag shift)
+  monthly_series: [UNRATE, CPIAUCSL]
+  weekly_series: [NFCI]
+  daily_series: [DGS10, DGS2, T10Y2Y, DFF, DCOILWTICO, BAMLH0A0HYM2]
+  # If BAMLH0A0HYM2 covers at least this fraction of the feature window it is
+  # used as the credit feature; otherwise we fall back to the NFCI proxy.
+  hy_min_coverage: 0.80
+  # Publication lag applied to monthly series BEFORE forward-filling so that
+  # only information actually public on date t is used as a feature.
+  #   UNRATE  : released ~ first Friday of the month following the reference
+  #             month  -> shift forward by 1 calendar month + a few buffer days
+  #   CPIAUCSL: released ~ mid month following reference month -> shift ~1 month
+  publication_lag_days:
+    UNRATE: 40
+    CPIAUCSL: 45     # CPI release timing (mid-following-month) -> 45d buffer
+    NFCI: 5        # weekly NFCI is published with a short reporting lag
+  request:
+    timeout: 30
+    max_retries: 4
+    backoff_factor: 0.5
+
+# ------------------------------- Targets -----------------------------------
+targets:
+  horizons: [5, 21]                  # forecast horizons (trading days)
+  trading_days_per_year: 252
+  # Bonus classification module: high-risk regime flag
+  regime:
+    max_drawdown_threshold: 0.05     # flag if next-21d max drawdown > 5%
+    window: 21
+
+# ------------------------------- Features ----------------------------------
+features:
+  vol_windows: [1, 5, 21, 63]        # HAR-style realized-vol component windows
+  return_lags: [1, 5, 21]            # lagged cumulative returns
+  skew_kurt_window: 63
+  downside_window: 63
+  vix_change_window: 5
+  yield_change_window: 21
+  rate_change_window: 21
+  spread_change_window: 21
+  oil_return_window: 21
+  unemployment_change_window: 3
+  cpi_yoy_window: 12                 # months
+  use_month_dummies: false           # skip calendar dummies (noise) per spec
+
+# ------------------------------- Models ------------------------------------
+models:
+  ewma_lambda: 0.94
+  garch:
+    dist: "t"                        # Student-t innovations
+    refit_every: 63                  # GARCH is expensive -> re-fit quarterly
+  lstm:
+    enabled: true                    # skipped gracefully if torch missing
+    epochs: 15
+    hidden_size: 16
+    num_layers: 1
+    lr: 0.005
+    seq_len: 20
+    batch_size: 512
+    refit_every: 126
+    patience: 5
+  ml:
+    ridge_alphas: [0.1, 1.0, 10.0, 100.0]
+    rf:
+      n_estimators: 150
+      max_depth: [null, 8]
+      min_samples_leaf: [10, 20]
+      max_features: ["sqrt"]
+    boosting:
+      backend: "lightgbm"            # "lightgbm" or "xgboost"
+      n_estimators: [200]
+      learning_rate: [0.05]
+      num_leaves: [15, 31]
+      min_child_samples: [20, 50]
+
+# ------------------------------- Validation --------------------------------
+validation:
+  train_initial_years: 8             # initial expanding window (~8 years)
+  ml_refit_every: 21                 # ML / classical (non-GARCH) re-fit cadence
+  embargo_days: "horizon"            # purge = h days between train-end & test-start
+  oos_start: "2010-01-01"            # purely out-of-sample forecasts from here
+  cv_splits: 5                       # TimeSeriesSplit folds used for tuning
+
+# ------------------------------- Evaluation --------------------------------
+evaluation:
+  subperiods:
+    full: ["2010-01-01", null]
+    calm_2010_2019: ["2010-01-01", "2019-12-31"]
+    covid_2020: ["2020-01-01", "2020-12-31"]
+    rate_shock_2022: ["2022-01-01", "2022-12-31"]
+  vix_crisis_threshold: 30
+
+# ---------------------------- Economic value -------------------------------
+strategy:
+  target_vol: 0.15                   # annualized volatility target
+  leverage_cap: 1.5
+  leverage_floor: 0.0
+  rebalance_every: 21                # trading days
+  transaction_cost_bps: 5            # 5 bps per unit of turnover
+  initial_capital: 100.0
+
+# ------------------------------- Runtime -----------------------------------
+runtime:
+  seeds: [7, 42, 2024]               # primary seed = first element
+  n_jobs: -1                          # -1 = use all CPUs for sklearn/lgbm
+  fast: false                         # --fast reduces refit frequency / sample

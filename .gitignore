@@ -1,0 +1,100 @@
+# ---------------------------------------------------------------------------
+# vol-forecast-benchmark — Git ignore
+# Data and model artifacts are REGENERABLE via the pipeline
+# (`make all` / `python run_all.py all`), so they are not committed.
+# Only source, config, docs, notebooks, tests and small result tables/figures
+# that are quoted in the README/paper are kept under version control.
+# ---------------------------------------------------------------------------
+
+# ---- Python ------------------------------------------------------------- #
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+ENV/
+pip-wheel-metadata/
+
+# ---- Testing / type / lint caches ------------------------------------- #
+.pytest_cache/
+.tox/
+.nox/
+.coverage
+.coverage.*
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+.cache/
+nosetests.xml
+coverage.xml
+
+# ---- Jupyter ------------------------------------------------------------ #
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+profile_default/
+ipython_config.py
+
+# ---- Editors / IDEs / OS ------------------------------------------------ #
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---- Secrets / local overrides ------------------------------------------ #
+.env
+.env.*
+*.pem
+*.key
+*_secret*
+config.local.yaml
+
+# ---- Logs & scratch ----------------------------------------------------- #
+*.log
+results/**/*.log
+results/pytest.log
+logs/
+# archives / large binaries that must never be committed
+*.zip
+*.rar
+*.7z
+# ad-hoc dev scratch scripts kept at the repo root during development
+/_*.py
+/scratch/
+
+# ---- Regenerable data (recreate with: python run_all.py data features) --- #
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# ---- Large regenerable model/forecast artifacts -------------------------- #
+results/*.gz
+results/oos_predictions.csv.gz
+results/bt_*.csv
+results/run_meta.json
+results/deliverables_checklist.json
+
+# ---- PyTorch / checkpoint leftovers -------------------------------------- #
+*.pt
+*.pth
+*.ckpt
+*.pkl
+lightning_logs/
+
+# Keep the deliverable result tables & figures (quoted in README/paper)
+!results/tables/
+!results/figures/
+!results/tables/*.csv
+!results/tables/*.md
+!results/tables/*.json
+!results/figures/*.png
+!results/summary.md

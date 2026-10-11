@@ -1,0 +1,2 @@
+logistic_pr_auc,logistic_brier,logistic_base_rate,logistic_n,lightgbm_pr_auc,lightgbm_brier,lightgbm_base_rate,lightgbm_n
+0.3479438987225235,0.1772935378173551,0.2223357167177392,2937,0.22231351273304506,0.20540820680043817,0.2223357167177392,2937

@@ -1,0 +1,26 @@
+# Pinned, reproducible environment for the volatility forecasting benchmark.
+# Verified working on Python 3.11.
+numpy==2.4.6
+pandas==2.3.1
+scipy==1.16.1
+statsmodels==0.15.0
+arch==8.0.0
+scikit-learn==1.7.2
+lightgbm==4.6.0
+xgboost==3.0.5
+shap==0.51.0
+matplotlib==3.10.6
+# yfinance >= 1.0 is REQUIRED: the legacy 0.1.x line no longer returns data
+# (Yahoo changed its crumb/cookie API). 0.1.74 silently returns empty frames.
+yfinance==1.7.0
+pandas-datareader==0.11.1
+requests==2.32.0
+PyYAML==6.0.2
+tqdm==4.67.1
+jupyter==1.1.1
+nbformat==5.11.1
+nbclient==0.11.0
+ipykernel==7.2.0
+pytest==9.1.1
+# Optional deep learning (LSTM). Pipeline degrades gracefully without it.
+torch==2.8.0

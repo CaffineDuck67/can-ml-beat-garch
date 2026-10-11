@@ -1,0 +1,2 @@
+# Placeholder so the (otherwise git-ignored) raw-data directory is tracked.
+# Populate it by running: `python run_all.py data` (or `make data`).
